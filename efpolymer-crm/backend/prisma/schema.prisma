@@ -1,0 +1,295 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id            String        @id @default(cuid())
+  name          String
+  type          String        // farmer, distributor, NGO, municipality
+  region        String?
+  segment       String?
+  size          String?
+  website       String?
+  notes         String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  contacts      Contact[]
+  opportunities Opportunity[]
+  tickets       Ticket[]
+  tags          String        @default("[]") // JSON array as string
+
+  @@map("accounts")
+}
+
+model Contact {
+  id           String    @id @default(cuid())
+  accountId    String
+  account      Account   @relation(fields: [accountId], references: [id])
+  firstName    String
+  lastName     String
+  title        String?
+  email        String?
+  phone        String?
+  locale       String?   // en, es
+  consentEmail Boolean   @default(false)
+  consentDate  DateTime?
+  notes        String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@map("contacts")
+}
+
+model Lead {
+  id        String   @id @default(cuid())
+  source    String   // inbound, event, referral, distributor
+  firstName String
+  lastName  String
+  company   String?
+  email     String?
+  phone     String?
+  region    String?
+  segment   String?
+  score     Int      @default(0)
+  status    String   // new, working, qualified, disqualified
+  ownerId   String?
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("leads")
+}
+
+model Opportunity {
+  id                         String   @id @default(cuid())
+  accountId                  String
+  account                    Account  @relation(fields: [accountId], references: [id])
+  name                       String
+  stage                      String   // prospecting, discovery, trial_planned, trial_running, trial_result, proposal, negotiation, closed_won, closed_lost, on_hold
+  currency                   String   // ISO 4217
+  amount                     Decimal? @db.Decimal(18, 2)
+  probability                Int?     // 0-100
+  expectedClose              DateTime?
+  competitor                 String?
+  decisionProcess            String?
+  ownerId                    String?
+  useCase                    String?
+  efpSoilType                String?  // sandy, loamy, clay, etc.
+  efpClimateZone             String?  // arid, semi-arid, temperate, tropical
+  efpCrop                    String?
+  efpIrrigation              String?  // drip, flood, sprinkler
+  efpApplication             String?  // in-furrow, broadcasting, mixing
+  efpDosageKgHa              Float?
+  efpExpectedWaterSavingsPct Float?
+  efpExpectedYieldUpliftPct  Float?
+  efpExpectedROI             Float?
+  createdAt                  DateTime @default(now())
+  updatedAt                  DateTime @updatedAt
+  trials                     Trial[]
+  quotes                     Quote[]
+  tags                       String   @default("[]") // JSON array as string
+
+  @@map("opportunities")
+}
+
+model Trial {
+  id              String             @id @default(cuid())
+  opportunityId   String
+  opportunity     Opportunity        @relation(fields: [opportunityId], references: [id])
+  siteName        String
+  locationLat     Float?
+  locationLng     Float?
+  startDate       DateTime
+  endDate         DateTime?
+  protocolVersion String?
+  hasControl      Boolean            @default(true)
+  status          String             // planned, running, completed, canceled
+  notes           String?
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  measurements    TrialMeasurement[]
+
+  @@map("trials")
+}
+
+model TrialMeasurement {
+  id                String   @id @default(cuid())
+  trialId           String
+  trial             Trial    @relation(fields: [trialId], references: [id])
+  date              DateTime
+  soilMoisturePct   Float?
+  irrigationVolumeL Float?
+  rainfallMm        Float?
+  temperatureC      Float?
+  yieldEstimate     Float?
+  sampleNotes       String?
+  attachmentId      String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@map("trial_measurements")
+}
+
+model Activity {
+  id          String    @id @default(cuid())
+  relatedType String    // account, contact, opportunity, trial
+  relatedId   String
+  type        String    // call, meeting, visit, followup, task
+  subject     String
+  dueAt       DateTime?
+  completedAt DateTime?
+  ownerId     String?
+  location    String?
+  notes       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("activities")
+}
+
+model Product {
+  id            String      @id @default(cuid())
+  sku           String      @unique
+  name          String
+  packageSizeKg Float?
+  description   String?
+  active        Boolean     @default(true)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  prices        PriceTier[]
+
+  @@map("products")
+}
+
+model PriceTier {
+  id        String    @id @default(cuid())
+  productId String
+  product   Product   @relation(fields: [productId], references: [id])
+  region    String
+  currency  String
+  minQty    Int       @default(1)
+  unitPrice Decimal   @db.Decimal(18, 2)
+  validFrom DateTime
+  validTo   DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@map("price_tiers")
+}
+
+model Quote {
+  id            String      @id @default(cuid())
+  opportunityId String
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [id])
+  number        String      @unique
+  status        String      // draft, sent, accepted, rejected, expired
+  currency      String
+  subtotal      Decimal     @db.Decimal(18, 2)
+  tax           Decimal     @db.Decimal(18, 2)
+  total         Decimal     @db.Decimal(18, 2)
+  validUntil    DateTime
+  pdfDocId      String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  lines         QuoteLine[]
+
+  @@map("quotes")
+}
+
+model QuoteLine {
+  id          String  @id @default(cuid())
+  quoteId     String
+  quote       Quote   @relation(fields: [quoteId], references: [id])
+  productId   String?
+  description String
+  qty         Int
+  unitPrice   Decimal @db.Decimal(18, 2)
+  discountPct Int     @default(0)
+  lineTotal   Decimal @db.Decimal(18, 2)
+
+  @@map("quote_lines")
+}
+
+model Ticket {
+  id         String    @id @default(cuid())
+  accountId  String
+  account    Account   @relation(fields: [accountId], references: [id])
+  contactId  String?
+  subject    String
+  status     String    // open, pending, resolved, closed
+  priority   String    // low, normal, high, urgent
+  slaDueAt   DateTime?
+  resolvedAt DateTime?
+  ownerId    String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@map("tickets")
+}
+
+model Document {
+  id         String    @id @default(cuid())
+  name       String
+  type       String    // msds, cert, proposal, photo, report
+  sizeBytes  Int
+  checksum   String
+  tags       String    @default("[]") // JSON array as string
+  version    Int       @default(1)
+  linkedType String?   // account, opportunity, trial, ticket
+  linkedId   String?
+  filePath   String    // encrypted blob path in vault
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  expiresAt  DateTime?
+
+  @@map("documents")
+}
+
+model User {
+  id           String    @id @default(cuid())
+  name         String
+  email        String    @unique
+  role         String    // admin, sales, agronomy, success, finance, read_only
+  locale       String    @default("en")
+  timeZone     String    @default("UTC")
+  isActive     Boolean   @default(true)
+  passwordHash String
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@map("users")
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  actorUserId String?
+  action      String
+  entityType  String
+  entityId    String
+  beforeJson  String?
+  afterJson   String?
+  createdAt   DateTime @default(now())
+  checksum    String
+
+  @@map("audit_logs")
+}
+
+model BackupSnapshot {
+  id        String   @id @default(cuid())
+  path      String
+  sizeBytes Int
+  checksum  String
+  createdAt DateTime @default(now())
+  notes     String?
+
+  @@map("backup_snapshots")
+}
