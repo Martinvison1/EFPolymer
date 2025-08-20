@@ -90,6 +90,159 @@
             color: #28a745;
             text-decoration: none;
         }
+        /* Opportunity Management Styles */
+        .opportunity-dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        .dashboard-panel {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .form-group textarea {
+            height: 80px;
+            resize: vertical;
+        }
+        .btn-small {
+            background: #28a745;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px 5px 5px 0;
+        }
+        .btn-small:hover {
+            background: #218838;
+        }
+        .btn-secondary {
+            background: #6c757d;
+        }
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        .opportunity-list {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+        }
+        .opportunity-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+        .opportunity-item:hover {
+            background: #f8f9fa;
+        }
+        .opportunity-item:last-child {
+            border-bottom: none;
+        }
+        .opportunity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .opportunity-title {
+            font-weight: bold;
+            color: #333;
+        }
+        .opportunity-status {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status-new { background: #cce5ff; color: #0056b3; }
+        .status-qualified { background: #fff3cd; color: #856404; }
+        .status-proposal { background: #e2e3e5; color: #383d41; }
+        .status-negotiation { background: #f8d7da; color: #721c24; }
+        .status-closed-won { background: #d4edda; color: #155724; }
+        .status-closed-lost { background: #f8d7da; color: #721c24; }
+        .opportunity-details {
+            font-size: 14px;
+            color: #666;
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+        }
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #28a745;
+            display: block;
+        }
+        .metric-label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 30px;
+            border: none;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+        .close:hover {
+            color: black;
+        }
         @media(max-width: 768px) {
             header h1 {
                 font-size: 2rem;
@@ -99,6 +252,12 @@
             }
             .section {
                 padding: 20px 10px;
+            }
+            .opportunity-dashboard {
+                grid-template-columns: 1fr;
+            }
+            .metrics-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             }
         }
     </style>
@@ -266,6 +425,146 @@
     </div>
 </section>
 
+<section class="section">
+    <h2>Gestión de Oportunidades</h2>
+    <p style="text-align:center; margin-bottom: 30px;">
+        Rastrea clientes, oportunidades de venta y métricas de rendimiento para optimizar tu estrategia comercial.
+    </p>
+
+    <div class="opportunity-dashboard">
+        <div class="dashboard-panel">
+            <h3>Agregar Cliente</h3>
+            <form id="customerForm">
+                <div class="form-group">
+                    <label for="customerName">Nombre del Cliente:</label>
+                    <input type="text" id="customerName" required>
+                </div>
+                <div class="form-group">
+                    <label for="customerEmail">Email:</label>
+                    <input type="email" id="customerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="customerPhone">Teléfono:</label>
+                    <input type="tel" id="customerPhone">
+                </div>
+                <div class="form-group">
+                    <label for="customerCompany">Empresa:</label>
+                    <input type="text" id="customerCompany">
+                </div>
+                <div class="form-group">
+                    <label for="customerLocation">Ubicación:</label>
+                    <input type="text" id="customerLocation">
+                </div>
+                <button type="submit" class="btn-small">Guardar Cliente</button>
+            </form>
+        </div>
+
+        <div class="dashboard-panel">
+            <h3>Crear Oportunidad</h3>
+            <form id="opportunityForm">
+                <div class="form-group">
+                    <label for="opportunityCustomer">Cliente:</label>
+                    <select id="opportunityCustomer" required>
+                        <option value="">Seleccionar cliente...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="opportunityTitle">Título de la Oportunidad:</label>
+                    <input type="text" id="opportunityTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="opportunityValue">Valor Estimado (USD):</label>
+                    <input type="number" id="opportunityValue" min="0" step="100">
+                </div>
+                <div class="form-group">
+                    <label for="opportunityStatus">Estado:</label>
+                    <select id="opportunityStatus" required>
+                        <option value="new">Nuevo</option>
+                        <option value="qualified">Calificado</option>
+                        <option value="proposal">Propuesta</option>
+                        <option value="negotiation">Negociación</option>
+                        <option value="closed-won">Cerrado - Ganado</option>
+                        <option value="closed-lost">Cerrado - Perdido</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="opportunityNotes">Notas:</label>
+                    <textarea id="opportunityNotes" placeholder="Detalles adicionales sobre la oportunidad..."></textarea>
+                </div>
+                <button type="submit" class="btn-small">Crear Oportunidad</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="metrics-grid">
+        <div class="metric-card">
+            <span class="metric-value" id="totalCustomers">0</span>
+            <div class="metric-label">Clientes Totales</div>
+        </div>
+        <div class="metric-card">
+            <span class="metric-value" id="totalOpportunities">0</span>
+            <div class="metric-label">Oportunidades</div>
+        </div>
+        <div class="metric-card">
+            <span class="metric-value" id="totalValue">$0</span>
+            <div class="metric-label">Valor Total</div>
+        </div>
+        <div class="metric-card">
+            <span class="metric-value" id="winRate">0%</span>
+            <div class="metric-label">Tasa de Éxito</div>
+        </div>
+    </div>
+
+    <div style="margin-top: 30px;">
+        <h3>Oportunidades Activas</h3>
+        <div class="opportunity-list" id="opportunityList">
+            <div style="padding: 20px; text-align: center; color: #666;">
+                No hay oportunidades registradas. Crea tu primera oportunidad arriba.
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <button class="btn-small btn-secondary" onclick="exportData()">Exportar Datos</button>
+        <button class="btn-small btn-secondary" onclick="clearAllData()">Limpiar Todos los Datos</button>
+    </div>
+</section>
+
+<!-- Modal for editing opportunities -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Editar Oportunidad</h3>
+        <form id="editOpportunityForm">
+            <div class="form-group">
+                <label for="editOpportunityTitle">Título:</label>
+                <input type="text" id="editOpportunityTitle" required>
+            </div>
+            <div class="form-group">
+                <label for="editOpportunityValue">Valor (USD):</label>
+                <input type="number" id="editOpportunityValue" min="0" step="100">
+            </div>
+            <div class="form-group">
+                <label for="editOpportunityStatus">Estado:</label>
+                <select id="editOpportunityStatus" required>
+                    <option value="new">Nuevo</option>
+                    <option value="qualified">Calificado</option>
+                    <option value="proposal">Propuesta</option>
+                    <option value="negotiation">Negociación</option>
+                    <option value="closed-won">Cerrado - Ganado</option>
+                    <option value="closed-lost">Cerrado - Perdido</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="editOpportunityNotes">Notas:</label>
+                <textarea id="editOpportunityNotes"></textarea>
+            </div>
+            <button type="submit" class="btn-small">Actualizar</button>
+            <button type="button" class="btn-small btn-secondary" onclick="closeModal()">Cancelar</button>
+        </form>
+    </div>
+</div>
+
 <section class="section" id="contact">
     <h2>Contáctanos</h2>
     <p style="text-align:center;">
@@ -279,6 +578,294 @@
     <p>&copy; 2025 EF Polymer. Todos los derechos reservados.</p>
     <p>Email: <a href="mailto:martin.vogelbaum@efpolymer.com">info@efpolymer.com</a> | Sitio web: <a href="https://www.efpolymer.com">www.efpolymer.com</a></p>
 </footer>
+
+<script>
+    // Opportunity Management System
+    class OpportunityManager {
+        constructor() {
+            this.customers = this.loadData('customers') || [];
+            this.opportunities = this.loadData('opportunities') || [];
+            this.init();
+        }
+
+        loadData(key) {
+            try {
+                const data = localStorage.getItem(key);
+                return data ? JSON.parse(data) : null;
+            } catch (e) {
+                console.error('Error loading data:', e);
+                return null;
+            }
+        }
+
+        saveData(key, data) {
+            try {
+                localStorage.setItem(key, JSON.stringify(data));
+            } catch (e) {
+                console.error('Error saving data:', e);
+                alert('Error guardando datos. Por favor, intente de nuevo.');
+            }
+        }
+
+        init() {
+            this.bindEvents();
+            this.updateCustomerSelect();
+            this.updateMetrics();
+            this.renderOpportunities();
+        }
+
+        bindEvents() {
+            // Customer form
+            document.getElementById('customerForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.addCustomer();
+            });
+
+            // Opportunity form
+            document.getElementById('opportunityForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.addOpportunity();
+            });
+
+            // Edit form
+            document.getElementById('editOpportunityForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.updateOpportunity();
+            });
+
+            // Modal events
+            const modal = document.getElementById('editModal');
+            const closeBtn = document.getElementsByClassName('close')[0];
+            
+            closeBtn.onclick = () => modal.style.display = 'none';
+            
+            window.onclick = (event) => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            };
+        }
+
+        addCustomer() {
+            const form = document.getElementById('customerForm');
+            const customer = {
+                id: Date.now().toString(),
+                name: form.customerName.value,
+                email: form.customerEmail.value,
+                phone: form.customerPhone.value,
+                company: form.customerCompany.value,
+                location: form.customerLocation.value,
+                createdAt: new Date().toISOString()
+            };
+
+            this.customers.push(customer);
+            this.saveData('customers', this.customers);
+            this.updateCustomerSelect();
+            this.updateMetrics();
+            form.reset();
+            
+            alert('Cliente agregado exitosamente!');
+        }
+
+        addOpportunity() {
+            const form = document.getElementById('opportunityForm');
+            const opportunity = {
+                id: Date.now().toString(),
+                customerId: form.opportunityCustomer.value,
+                title: form.opportunityTitle.value,
+                value: parseFloat(form.opportunityValue.value) || 0,
+                status: form.opportunityStatus.value,
+                notes: form.opportunityNotes.value,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+
+            this.opportunities.push(opportunity);
+            this.saveData('opportunities', this.opportunities);
+            this.updateMetrics();
+            this.renderOpportunities();
+            form.reset();
+            
+            alert('Oportunidad creada exitosamente!');
+        }
+
+        updateOpportunity() {
+            const form = document.getElementById('editOpportunityForm');
+            const opportunityId = form.dataset.opportunityId;
+            
+            const opportunityIndex = this.opportunities.findIndex(opp => opp.id === opportunityId);
+            if (opportunityIndex === -1) return;
+
+            this.opportunities[opportunityIndex] = {
+                ...this.opportunities[opportunityIndex],
+                title: form.editOpportunityTitle.value,
+                value: parseFloat(form.editOpportunityValue.value) || 0,
+                status: form.editOpportunityStatus.value,
+                notes: form.editOpportunityNotes.value,
+                updatedAt: new Date().toISOString()
+            };
+
+            this.saveData('opportunities', this.opportunities);
+            this.updateMetrics();
+            this.renderOpportunities();
+            this.closeModal();
+            
+            alert('Oportunidad actualizada exitosamente!');
+        }
+
+        editOpportunity(opportunityId) {
+            const opportunity = this.opportunities.find(opp => opp.id === opportunityId);
+            if (!opportunity) return;
+
+            const form = document.getElementById('editOpportunityForm');
+            form.dataset.opportunityId = opportunityId;
+            form.editOpportunityTitle.value = opportunity.title;
+            form.editOpportunityValue.value = opportunity.value;
+            form.editOpportunityStatus.value = opportunity.status;
+            form.editOpportunityNotes.value = opportunity.notes;
+
+            document.getElementById('editModal').style.display = 'block';
+        }
+
+        closeModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        updateCustomerSelect() {
+            const select = document.getElementById('opportunityCustomer');
+            select.innerHTML = '<option value="">Seleccionar cliente...</option>';
+            
+            this.customers.forEach(customer => {
+                const option = document.createElement('option');
+                option.value = customer.id;
+                option.textContent = `${customer.name} - ${customer.company || 'Sin empresa'}`;
+                select.appendChild(option);
+            });
+        }
+
+        updateMetrics() {
+            const totalCustomers = this.customers.length;
+            const totalOpportunities = this.opportunities.length;
+            const totalValue = this.opportunities.reduce((sum, opp) => sum + opp.value, 0);
+            
+            const closedOpportunities = this.opportunities.filter(opp => 
+                opp.status === 'closed-won' || opp.status === 'closed-lost'
+            );
+            const wonOpportunities = this.opportunities.filter(opp => opp.status === 'closed-won');
+            const winRate = closedOpportunities.length > 0 ? 
+                Math.round((wonOpportunities.length / closedOpportunities.length) * 100) : 0;
+
+            document.getElementById('totalCustomers').textContent = totalCustomers;
+            document.getElementById('totalOpportunities').textContent = totalOpportunities;
+            document.getElementById('totalValue').textContent = `$${totalValue.toLocaleString()}`;
+            document.getElementById('winRate').textContent = `${winRate}%`;
+        }
+
+        renderOpportunities() {
+            const container = document.getElementById('opportunityList');
+            
+            if (this.opportunities.length === 0) {
+                container.innerHTML = `
+                    <div style="padding: 20px; text-align: center; color: #666;">
+                        No hay oportunidades registradas. Crea tu primera oportunidad arriba.
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort opportunities by date (newest first)
+            const sortedOpportunities = [...this.opportunities].sort((a, b) => 
+                new Date(b.updatedAt) - new Date(a.updatedAt)
+            );
+
+            container.innerHTML = sortedOpportunities.map(opportunity => {
+                const customer = this.customers.find(c => c.id === opportunity.customerId);
+                const customerName = customer ? customer.name : 'Cliente eliminado';
+                const companyName = customer && customer.company ? ` - ${customer.company}` : '';
+                
+                return `
+                    <div class="opportunity-item" onclick="opportunityManager.editOpportunity('${opportunity.id}')">
+                        <div class="opportunity-header">
+                            <span class="opportunity-title">${opportunity.title}</span>
+                            <span class="opportunity-status status-${opportunity.status}">
+                                ${this.getStatusLabel(opportunity.status)}
+                            </span>
+                        </div>
+                        <div class="opportunity-details">
+                            <strong>Cliente:</strong> ${customerName}${companyName}<br>
+                            <strong>Valor:</strong> $${opportunity.value.toLocaleString()}<br>
+                            <strong>Actualizado:</strong> ${new Date(opportunity.updatedAt).toLocaleDateString()}
+                            ${opportunity.notes ? `<br><strong>Notas:</strong> ${opportunity.notes}` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        getStatusLabel(status) {
+            const labels = {
+                'new': 'Nuevo',
+                'qualified': 'Calificado',
+                'proposal': 'Propuesta',
+                'negotiation': 'Negociación',
+                'closed-won': 'Ganado',
+                'closed-lost': 'Perdido'
+            };
+            return labels[status] || status;
+        }
+
+        exportData() {
+            const data = {
+                customers: this.customers,
+                opportunities: this.opportunities,
+                exportDate: new Date().toISOString()
+            };
+
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `efpolymer-opportunities-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            URL.revokeObjectURL(url);
+        }
+
+        clearAllData() {
+            if (confirm('¿Estás seguro de que quieres eliminar todos los datos? Esta acción no se puede deshacer.')) {
+                localStorage.removeItem('customers');
+                localStorage.removeItem('opportunities');
+                this.customers = [];
+                this.opportunities = [];
+                this.updateCustomerSelect();
+                this.updateMetrics();
+                this.renderOpportunities();
+                alert('Todos los datos han sido eliminados.');
+            }
+        }
+    }
+
+    // Global functions
+    function exportData() {
+        opportunityManager.exportData();
+    }
+
+    function clearAllData() {
+        opportunityManager.clearAllData();
+    }
+
+    function closeModal() {
+        opportunityManager.closeModal();
+    }
+
+    // Initialize the system when the page loads
+    let opportunityManager;
+    document.addEventListener('DOMContentLoaded', function() {
+        opportunityManager = new OpportunityManager();
+    });
+</script>
 
 </body>
 </html>
