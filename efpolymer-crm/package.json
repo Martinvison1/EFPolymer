@@ -1,0 +1,62 @@
+{
+  "name": "efpolymer-crm",
+  "version": "1.0.0",
+  "description": "EF Polymer Local-Only CRM - Agronomy-focused sales management",
+  "scripts": {
+    "dev": "concurrently \"npm run backend:dev\" \"npm run frontend:dev\"",
+    "build": "npm run backend:build && npm run frontend:build",
+    "start": "npm run backend:start",
+    "backend:dev": "cd backend && npm run dev",
+    "backend:build": "cd backend && npm run build",
+    "backend:start": "cd backend && npm run start",
+    "frontend:dev": "cd frontend && npm run dev",
+    "frontend:build": "cd frontend && npm run build",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "app:pack": "npm run build && electron-builder",
+    "app:start": "npm run start && open https://localhost:8443"
+  },
+  "keywords": [
+    "crm",
+    "agronomy",
+    "efpolymer",
+    "local",
+    "farming",
+    "trials"
+  ],
+  "author": "EF Polymer",
+  "license": "PROPRIETARY",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "electron": "^28.2.0",
+    "electron-builder": "^24.9.1"
+  },
+  "build": {
+    "appId": "com.efpolymer.crm",
+    "productName": "EF Polymer CRM",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "backend/dist/**/*",
+      "frontend/dist/**/*",
+      "main.js"
+    ],
+    "mac": {
+      "icon": "assets/icon.icns",
+      "category": "public.app-category.business"
+    },
+    "win": {
+      "icon": "assets/icon.ico",
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}
