@@ -15,7 +15,7 @@ import {
   TicketIcon,
   FolderIcon,
   ChartPieIcon,
-  CogIcon,
+
   ArrowRightOnRectangleIcon,
   Bars3Icon,
   XMarkIcon,
@@ -115,10 +115,10 @@ export function Layout({ children }: LayoutProps) {
   )
 }
 
-function SidebarContent({ navigation, location, t }: any) {
+function SidebarContent({ navigation, location, t }: { navigation: any[], location: any, t: any }) {
   return (
     <nav className="flex-1 space-y-1 px-2 py-4">
-      {navigation.map((item) => {
+      {navigation.map((item: any) => {
         const current = location.pathname === item.href
         return (
           <Link
