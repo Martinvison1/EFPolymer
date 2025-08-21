@@ -1,0 +1,21 @@
+name,stage,amount,expected_close,kg_product,probability,region,crop
+Almería tomato fields 2025,trial_planned,35000,2025-03-01,1500,75,Spain,tomato
+Netherlands greenhouse project,negotiation,85000,2025-02-15,3200,90,Netherlands,cucumber
+Morocco citrus expansion,discovery,45000,2025-04-20,2100,60,Morocco,citrus
+French vineyard irrigation,proposal,62000,2025-03-10,2800,80,France,grapes
+Italian olive grove enhancement,trial_running,28000,2025-02-28,1200,65,Italy,olives
+German potato fields,prospecting,18000,2025-05-15,800,40,Germany,potatoes
+Spanish pepper cultivation,closed_won,42000,2025-01-30,1800,100,Spain,peppers
+Turkish cotton expansion,negotiation,95000,2025-04-05,4200,85,Turkey,cotton
+Greek strawberry farms,trial_result,33000,2025-03-20,1400,70,Greece,strawberries
+Polish wheat enhancement,discovery,55000,2025-05-30,2600,55,Poland,wheat
+Portuguese corn fields,proposal,29000,2025-04-12,1300,60,Portugal,corn
+Belgian lettuce greenhouses,trial_planned,38000,2025-02-25,1600,65,Belgium,lettuce
+Austrian apple orchards,prospecting,72000,2025-06-01,3100,45,Austria,apples
+Swiss herb cultivation,negotiation,24000,2025-03-15,900,75,Switzerland,herbs
+Danish cabbage farms,closed_won,51000,2025-01-25,2200,100,Denmark,cabbage
+Finnish berry cultivation,discovery,19000,2025-05-10,850,50,Finland,berries
+Norwegian salmon farming,proposal,110000,2025-04-30,5000,70,Norway,salmon
+Swedish forest products,trial_planned,67000,2025-03-25,2900,60,Sweden,timber
+Romanian sunflower fields,prospecting,34000,2025-06-15,1500,35,Romania,sunflower
+Bulgarian rose cultivation,negotiation,26000,2025-04-18,1100,80,Bulgaria,roses
